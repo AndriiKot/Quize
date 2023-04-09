@@ -4,15 +4,14 @@
    output
 end
 
-class Instructions
-  def add(arg) = arg + arg
-  def squar(arg) = arg * arg
-end
 
-instructions = Instructions.new
+def add(arg) = arg + arg
+def squar(arg) = arg * arg
 
-add = instructions.method(:add)
-squar = instructions.method(:squar)
+
+
+add = method(:add)
+squar = method(:squar)
 
 
 arr = *1..5
