@@ -4,23 +4,21 @@
    output
 end
 
-class Instr
+class Instructions
   def add(arg) = arg + arg
   def squar(arg) = arg * arg
 end
 
-instructions = Instr.new
-instructionsAdd = instructions.method(:add)
-instructionsSquar = instructions.method(:squar)
+instructions = Instructions.new
 
+add = instructions.method(:add)
+squar = instructions.method(:squar)
 
-p instructionsAdd
-p instructionsSquar
 
 arr = *1..10
 
-newArr1 = copyArrayDoSmth(arr,instructionsAdd)
-newArr2 = copyArrayDoSmth(arr,instructionsSquar)
+newArr1 = copyArrayDoSmth(arr,add)
+newArr2 = copyArrayDoSmth(arr,squar)
 
 p arr
 p newArr1
