@@ -1,5 +1,4 @@
 def parse(file_path)
-  file_path = '' unless file_path.is_a?(String)
   JSON.parse(File.read(file_path))
 rescue Errno::ENOENT
   puts "File not found: #{file_path.inspect}"

@@ -11,7 +11,7 @@ boot[:setup].call
 
 data = {
   default: parse('./data/quize-ubuntu.json'),
-  load: ->(file) { exist?(file) && parse(file) ? parse(file) : data[:default] },
+  load: ->(file) { exist?(file) && parse(file) || data[:default] },
 }
 
 data_arr = data[:load][ARGV[0]].to_a || []
@@ -20,12 +20,12 @@ events = {
   Q: -> { exit },
 }
 
-data_arr.each do |arr|
+data_arr.to_a.each do |arr|
   question, answer = arr[0], arr[1]
 
   puts "\n\n Question: #{question}"
   print" Your answer: "
-  gets
+  STDIN.gets
   puts " Answer: #{answer}\n\n"
   puts " Press 'Q' to exit"
   puts " Press any key to continue"
