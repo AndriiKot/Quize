@@ -1,5 +1,4 @@
 
-
 events = {
   game: {
     start: {
@@ -12,20 +11,22 @@ events = {
 },
   error: {},
   libs: ['json', 'io/console'],
-  utils: {},
+  utils: -> { Dir.glob("./utils/**/*.rb") }.call,
   data: {},
-  setup: -> { events[:libs].each { |lib| require lib } },
+  setup: -> {
+              events[:libs].each { |lib| require lib }
+              events[:utils].each { |util| require_relative util }
+  },
 }
 
 events[:setup].call
 
 path = ARGV[0] || './quize-ubuntu.json'
-data = JSON.parse(File.read(path))
 
 repeat_path = 'repeat.json'
 existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
 
-p data
+p parse(path)
 
 #   "exit?" => ->(key) { exit if key.casecmp? 'q' },
 #   "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...',events},
