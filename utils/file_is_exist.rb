@@ -1,3 +1,3 @@
-def exits?(file_path = '')
+def exist?(file_path = '')
     File.exist?(file_path)
 end

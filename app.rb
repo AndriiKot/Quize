@@ -11,7 +11,7 @@ boot[:setup].call
 
 data = {
   default: parse('./data/quize-ubuntu.json'),
-  load: ->(file) { exits?(file) ? parse(file) : data[:default] },
+  load: ->(file) { exist?(file) && parse(file) ? parse(file) : data[:default] },
 }
 
 p data[:load]['./data/test.json']
