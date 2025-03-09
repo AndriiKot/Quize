@@ -17,21 +17,14 @@ data = {
 data_arr = data[:load][ARGV[0]].to_a || []
 repeat_arr = []
 
+
+
+
 events = {
-  Q: -> { exit},
-  game: {
-    start: {
-      repeat: ->(key, question, answer) { {
-        repeat_condition?: ->(arg) { arg == "\r" || arg == "\n" }[key],
-        add: repeat_arr << [question, answer],
-      }},
-      skip: -> { puts "SKIP" },
-    },
-    end: {},
-    exit: ->(key) { exit if key.casecmp? 'q' },
-    message: {},
-},
-  error: {},
+  Q: -> { exit },
+  "\r": -> { print "\n\nEnter\n\n" },
+  "\n": -> { print "\n\nEnter\n\n" },
+  " ": -> { print "\n\nSpace\n\n" },
 }
 
 
@@ -40,32 +33,14 @@ data_arr.each do |arr|
 
   puts "Press 'q' to exit:"
   puts "Press 'Enter' to repeat or 'Space' to continue"
-  puts "Question: #{question}"
+  puts "\n\n Question: #{question}"
+  print" Your answer: "
+  gets
+  puts " Answer: #{answer}"
+
+
 
   key = STDIN.getch.upcase.to_sym
 
-  events[key][]
-
-  # events[:game][:exit].call(key)
-  # events[:game][:start][:repeat].call(key, question, answer)
-  # p data_arr
+  events[key]&.call
 end
-
-# while repeat_arr.size > 0
-#   repeat_arr.reverse_each do |arr|
-#     question, answer = arr[0], arr[1]
-
-#     puts "Press 'q' to exit:"
-#     puts "Press 'Enter' to repeat or 'Space' to continue"
-#     puts "Question: #{question}"
-
-#     key = STDIN.getch.upcase.to_s
-
-#     events[key]
-#     events[:game][:exit].call(key)
-#     events[:game][:start][:repeat].call(key, question, answer)
-#     repeat_arr.pop
-#     puts "\n\n REPEAT ARRAY: #{repeat_arr} \n\n"
-#     p repeat_arr.size
-#   end
-# end
