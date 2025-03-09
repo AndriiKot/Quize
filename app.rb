@@ -14,7 +14,7 @@ data = {
   load: ->(file) { exist?(file) && parse(file) ? parse(file) : data[:default] },
 }
 
-p data[:load]['./data/test.json']
+p data[:load][ARGV[0]]
 
 events = {
   game: {
