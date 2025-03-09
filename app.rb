@@ -2,8 +2,8 @@ boot = {
   libs: ['json', 'io/console'].freeze,
   utils: -> { Dir.glob("./utils/**/*.rb").freeze }.call,
   setup: -> {
-              boot[:libs].each { |lib| require lib }
-              boot[:utils].each { |util| require_relative util }
+    boot[:libs].each { |lib| require lib }
+    boot[:utils].each { |util| require_relative util }
   }
 }
 
@@ -15,32 +15,21 @@ data = {
 }
 
 data_arr = data[:load][ARGV[0]].to_a || []
-repeat_arr = []
-
-
-
 
 events = {
   Q: -> { exit },
-  "\r": -> { print "\n\nEnter\n\n" },
-  "\n": -> { print "\n\nEnter\n\n" },
-  " ": -> { print "\n\nSpace\n\n" },
 }
-
 
 data_arr.each do |arr|
   question, answer = arr[0], arr[1]
 
-  puts "Press 'q' to exit:"
-  puts "Press 'Enter' to repeat or 'Space' to continue"
   puts "\n\n Question: #{question}"
   print" Your answer: "
   gets
-  puts " Answer: #{answer}"
-
-
+  puts " Answer: #{answer}\n\n"
+  puts " Press 'Q' to exit"
+  puts " Press any key to continue"
 
   key = STDIN.getch.upcase.to_sym
-
   events[key]&.call
 end
