@@ -12,7 +12,7 @@ events = {
   error: {},
   libs: ['json', 'io/console'],
   utils: -> { Dir.glob("./utils/**/*.rb") }.call,
-  data: -> { Dir.glob("./data/**/*.json") }.call,
+  data: ->(file){ Dir.glob("./data/**/#{file}.json") },
   setup: -> {
               events[:libs].each { |lib| require lib }
               events[:utils].each { |util| require_relative util }
@@ -21,12 +21,12 @@ events = {
 
 events[:setup].call
 
-path = ARGV[0] || events[:data][0]
+p events[:data]['quize-ubuntu']
 
 # repeat_path = 'repeat.json'
 # existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
 
-p parse(path)
+# p parse(path)
 
 #   "exit?" => ->(key) { exit if key.casecmp? 'q' },
 #   "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...',events},
