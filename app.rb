@@ -14,46 +14,33 @@ data = {
   load: ->(file) { exist?(file) && parse(file) ? parse(file) : data[:default] },
 }
 
-p data[:load][ARGV[0]]
+data_arr = data[:load][ARGV[0]].to_a || []
 
 events = {
   game: {
     start: {
-      repeat: ->(key, value) { p 'REPEAT ', key, value },
+      repeat: ->(key, value) { {
+        repeat_condition?: ->(arg) { arg == "\r" || arg == "\n" }[key],
+      }},
       skip: -> { puts "SKIP" },
     },
     end: {},
-    exit: {},
+    exit: ->(key) { exit if key.casecmp? 'q' },
     message: {},
 },
   error: {},
-  data: {},
 }
 
 
+data_arr.each do |arr|
+  question, answer = arr[0], arr[1]
 
-#   "exit?" => ->(key) { exit if key.casecmp? 'q' },
-#   "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...',events},
-#   "skip" => -> { puts "You pressed Space: Moving to the next question..." },
-#   "repeat_condition?" => ->(arg) { arg == "\r" || arg == "\n" },
-#   "skip_condition?" => ->(arg) { arg == " " },
-#   "save" => ->(key, value) { File.open(repeat_path, 'a')},
-#   "save_condition?" => ->(key) { existing_keys.include? key },
-#   "open_file_to_add" => ->(key, value) {},
-#   "add_to_repeat" => ->(key, value) {},
-# }
+  puts "Press 'q' to exit:"
+  puts "Press 'Enter' to repeat or 'Space' to continue"
+  puts "Question: #{question}"
 
+  key = STDIN.getch
 
-# data.each do |arr|
-#   question, answer = arr[0], arr[1]
-
-#   puts "Press 'q' to exit:"
-#   puts "Press 'Enter' to repeat or 'Space' to continue"
-#   puts "Question: #{question}"
-
-#     key = STDIN.getch
-#   events['exit?'][key]
-
-#   events['repeat'].call(question, answer) if events['repeat_condition?'][key]
-#   events['skip'].call  if events['skip_condition?'][key]
-# end
+  events[:game][:exit].call(key)
+  events[:game][:start][:repeat].call(key, answer)
+end
