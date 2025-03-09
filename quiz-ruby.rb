@@ -12,7 +12,7 @@ events = {
   error: {},
   libs: ['json', 'io/console'],
   utils: -> { Dir.glob("./utils/**/*.rb") }.call,
-  data: {},
+  data: -> { Dir.glob("./data/**/*.json") }.call,
   setup: -> {
               events[:libs].each { |lib| require lib }
               events[:utils].each { |util| require_relative util }
@@ -21,10 +21,10 @@ events = {
 
 events[:setup].call
 
-path = ARGV[0] || './quize-ubuntu.json'
+path = ARGV[0] || events[:data][0]
 
-repeat_path = 'repeat.json'
-existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
+# repeat_path = 'repeat.json'
+# existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
 
 p parse(path)
 
