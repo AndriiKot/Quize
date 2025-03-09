@@ -7,9 +7,18 @@ data = JSON.parse(File.read(path))
 repeat_path = 'repeat.json'
 existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
 
-actions = {
+events = {
+  game: {},
+  exit: {},
+  start: {},
+  error: {},
+  repeat: {},
+  skip: {},
+  data: {},
+  utils: {},
+
   "exit?" => ->(key) { exit if key.casecmp? 'q' },
-  "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...', actions}, 
+  "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...',events},
   "skip" => -> { puts "You pressed Space: Moving to the next question..." },
   "repeat_condition?" => ->(arg) { arg == "\r" || arg == "\n" },
   "skip_condition?" => ->(arg) { arg == " " },
@@ -26,10 +35,10 @@ data.each do |arr|
   puts "Press 'q' to exit:"
   puts "Press 'Enter' to repeat or 'Space' to continue"
   puts "Question: #{question}"
-  
+
     key = STDIN.getch
-    actions['exit?'][key]
-    
-    actions['repeat'].call(question, answer) if actions['repeat_condition?'][key]
-    actions['skip'].call  if actions['skip_condition?'][key]
+  events['exit?'][key]
+
+  events['repeat'].call(question, answer) if events['repeat_condition?'][key]
+  events['skip'].call  if events['skip_condition?'][key]
 end
