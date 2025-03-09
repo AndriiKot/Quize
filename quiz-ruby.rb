@@ -8,14 +8,22 @@ repeat_path = 'repeat.json'
 existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
 
 events = {
-  game: {},
-  exit: {},
-  start: {},
+  game: {
+    start: {
+      repeat: ->(key, value) { puts value },
+      skip: -> { puts "You pressed Space: Moving to the next question..." },
+    },
+    end: {},
+    exit: {},
+},
   error: {},
-  repeat: {},
-  skip: {},
-  data: {},
   utils: {},
+  paths: {},
+  load: {
+    libs: {},
+    data: {},
+  },
+}
 
   "exit?" => ->(key) { exit if key.casecmp? 'q' },
   "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...',events},
