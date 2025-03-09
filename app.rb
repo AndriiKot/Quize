@@ -1,3 +1,20 @@
+boot = {
+  libs: ['json', 'io/console'].freeze,
+  utils: -> { Dir.glob("./utils/**/*.rb").freeze }.call,
+  setup: -> {
+              boot[:libs].each { |lib| require lib }
+              boot[:utils].each { |util| require_relative util }
+  }
+}
+
+boot[:setup].call
+
+data = {
+  default: parse('./data/quize-ubuntu.json'),
+  load: ->(file) { exits?(file) ? parse(file) : data[:default] },
+}
+
+p data[:load]['./data/test.json']
 
 events = {
   game: {
@@ -10,23 +27,10 @@ events = {
     message: {},
 },
   error: {},
-  libs: ['json', 'io/console'],
-  utils: -> { Dir.glob("./utils/**/*.rb") }.call,
   data: {},
-  setup: -> {
-              events[:libs].each { |lib| require lib }
-              events[:utils].each { |util| require_relative util }
-  },
 }
 
-events[:setup].call
 
-path = ARGV[0] || './quize-ubuntu.json'
-
-repeat_path = 'repeat.json'
-existing_keys = File.exist?(repeat_path) ? JSON.parse(File.read(repeat_path)).keys : []
-
-p parse(path)
 
 #   "exit?" => ->(key) { exit if key.casecmp? 'q' },
 #   "repeat" => ->(key, value) { puts 'You pressed Enter: continuing...',events},
